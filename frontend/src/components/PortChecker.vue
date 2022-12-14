@@ -1,13 +1,16 @@
 <script setup>
 import { reactive } from 'vue'
-import { Greet, PortCheck } from '../../wailsjs/go/main/App'
+import { Greet, PortCheck, NetInfo, SpeedTest } from '../../wailsjs/go/main/App'
 
 const data = reactive({
   result_json: {},
+  result_net: null,
+  result_speed: null,
   host: 'localhost',
   port: '58000',
   nums: '5',
-  waiting: false
+  waiting: false,
+  waiting_speed: false
 })
 
 function check() {
@@ -18,6 +21,22 @@ function check() {
     data.waiting = false
   })
 }
+
+function getif() {
+  data.result_net = null
+  NetInfo().then((result) => {
+    data.result_net = JSON.parse(result)
+  })
+}
+
+function getspeed() {
+  data.result_speed = null
+  data.waiting_speed = true
+  SpeedTest().then((result) => {
+    data.result_speed = JSON.parse(result)
+    data.waiting_speed = false
+  })
+}
 </script>
 
 <template>
@@ -25,8 +44,28 @@ function check() {
     <section class="section">
       <div class="container">
         <h1 class="title">Port Checker</h1>
+        <div class="field box">
+          <span v-if="data.result_net">
+            {{ data.result_net['global_ip'] }} / {{ data.result_net['isp'] }}
+            <span v-for="i in data.result_net['interface']">
+              {{ i.name }} : {{ i.ip }} /
+            </span>
+          </span>
+          <button class="button is-primary" @click="getif">Network Info</button>
+        </div>
+        <div class="field box">
+          <span v-if="data.waiting_speed"> Speed Testing ...</span>
+          <span v-if="data.result_speed">
+            Down :
+            {{ Math.round(data.result_speed[0]['download'] * 100) / 100 }} Mbps
+            / Up :
+            {{ Math.round(data.result_speed[0]['upload'] * 100) / 100 }} Mbps /
+            Ping :{{ data.result_speed[0]['latency'] }}
+          </span>
+          <button class="button is-primary" @click="getspeed">SpeedTest</button>
+        </div>
         <div class="field">
-          <label class="label">ホスト名 or IP : 開始ポート : x 個数</label>
+          <label class="label">Host or IP : Start Port : x Nums</label>
           <div class="field is-grouped">
             <div class="control">
               <input
@@ -58,11 +97,11 @@ function check() {
           </div>
         </div>
         <div class="field">
-          <button class="button is-small" @click="data.result_json = {}">
-            結果消去
+          <button class="button m-1" @click="data.result_json = {}">
+            Clear
           </button>
-          <button class="button is-primary is-small" @click="check">
-            ポートチェック
+          <button class="button m-1 is-primary" @click="check">
+            Start Scan
           </button>
         </div>
       </div>

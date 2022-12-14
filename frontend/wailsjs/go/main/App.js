@@ -6,6 +6,14 @@ export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
 
+export function NetInfo() {
+  return window['go']['main']['App']['NetInfo']();
+}
+
 export function PortCheck(arg1, arg2, arg3) {
   return window['go']['main']['App']['PortCheck'](arg1, arg2, arg3);
+}
+
+export function SpeedTest() {
+  return window['go']['main']['App']['SpeedTest']();
 }

@@ -3,4 +3,8 @@
 
 export function Greet(arg1:string):Promise<string>;
 
+export function NetInfo():Promise<string>;
+
 export function PortCheck(arg1:string,arg2:number,arg3:number):Promise<string>;
+
+export function SpeedTest():Promise<string>;
