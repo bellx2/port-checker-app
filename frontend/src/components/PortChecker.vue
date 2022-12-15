@@ -69,6 +69,7 @@ async function do_speedtest() {
     <nav class="navbar is-light" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <div class="navbar-item" href="https://bulma.io">
+          <fa class="icon m-1" icon="network-wired" />
           <h1 class="title">Port Checker</h1>
         </div>
       </div>
@@ -77,9 +78,12 @@ async function do_speedtest() {
       <div class="container">
         <div class="box">
           <div class="field">
-            <label class="label">Interfaces</label>
+            <label class="label icon-text">
+              <fa class="icon is-small" icon="ethernet" />
+              Interfaces
+            </label>
             <span v-if="data.result_net">
-              <span class="tag is-link">Global IP</span>
+              <span class="tag is-link icon-text">Global IP</span>
               {{ data.result_net['global_ip'] }} (ISP:
               {{ data.result_net['isp'] }})
               <br />
@@ -95,7 +99,10 @@ async function do_speedtest() {
         </div>
         <div class="box">
           <div class="field">
-            <label class="label">Speed Test (fast.com)</label>
+            <label class="label">
+              <fa class="icon is-small" icon="gauge" />
+              Speed Test (fast.com)</label
+            >
             <div v-for="r in data.result_speed">
               Down :
               {{ Math.round(r['download'] * 100) / 100 }}
@@ -117,7 +124,11 @@ async function do_speedtest() {
         </div>
         <div class="box">
           <div class="field">
-            <label class="label">Host or IP : Start Port : x Nums</label>
+            <label class="label">
+              <fa class="icon is-small" icon="list" />
+              Port Scan</label
+            >
+            Host or IP : Start Port : x Nums
             <div class="field is-grouped">
               <div class="control">
                 <input
